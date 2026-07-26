@@ -605,6 +605,15 @@ def normalize(namespace: str, formatCode: str, value: str) -> str:
             raise RegistryNotSupported(namespace)
     except KeyError:
         raise InvalidTransformation(namespace, formatCode)
+    except IndexError:
+        # The date rules split the value and index the pieces positionally, so a
+        # value with fewer parts than the rule expects raises IndexError. Report
+        # it as a transformation failure: callers already handle that, whereas a
+        # bare IndexError escapes the library's exception hierarchy and aborts
+        # the parse of an entire filing over one malformed fact.
+        raise TransformationException(
+            f'Could not normalize "{value}" with the transformation rule "{formatCode}" of registry {namespace}'
+        )
     except TransformationNotImplemented:
         msg = f'The transformation "{formatCode}" rule of registry {namespace} is currently not implemented in py-xbrl'
         raise TransformationNotImplemented(msg)

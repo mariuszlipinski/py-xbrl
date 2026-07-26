@@ -319,5 +319,39 @@ class TransformationTest(unittest.TestCase):
                     )
 
 
+class MalformedValueTest(unittest.TestCase):
+    """A malformed fact must not abort the parse of an entire filing.
+
+    The date rules split the value and index the pieces positionally, so a value
+    with too few parts used to raise a bare IndexError, which escapes the
+    library's exception hierarchy and is not caught by instance.py.
+    """
+
+    NAMESPACE = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
+
+    MALFORMED = [
+        ("date-monthname-day-year-en", "September"),
+        ("date-day-monthname-year-en", "15"),
+        ("date-month-day-year-en", "9"),
+        ("date-monthname-year-en", "September"),
+    ]
+
+    WELL_FORMED = [
+        ("date-monthname-day-year-en", "September 15, 2025", "2025-09-15"),
+        ("date-day-monthname-year-en", "15 September 2025", "2025-09-15"),
+    ]
+
+    def test_malformed_value_raises_transformation_exception(self):
+        for format_code, value in self.MALFORMED:
+            with self.subTest(format=format_code, value=value):
+                with self.assertRaises(TransformationException):
+                    normalize(self.NAMESPACE, format_code, value)
+
+    def test_well_formed_values_are_unaffected(self):
+        for format_code, value, expected in self.WELL_FORMED:
+            with self.subTest(format=format_code, value=value):
+                self.assertEqual(normalize(self.NAMESPACE, format_code, value), expected)
+
+
 if __name__ == "__main__":
     unittest.main()
