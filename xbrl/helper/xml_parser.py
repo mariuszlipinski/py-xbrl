@@ -6,6 +6,7 @@ It is used by the different parsing modules.
 
 import xml.etree.ElementTree as ET
 from io import StringIO
+from typing import Literal, cast
 from weakref import WeakKeyDictionary
 
 # Global storage for namespace maps, keyed by Element objects
@@ -38,7 +39,7 @@ def parse_file(file: str | StringIO) -> ET.ElementTree:
     :param file: either the file path (str) or a file-like object
     :return: The parsed ElementTree
     """
-    events = "start", "start-ns", "end-ns"
+    events: tuple[Literal["start", "start-ns", "end-ns"], ...] = "start", "start-ns", "end-ns"
 
     root = None
     ns_map: list[tuple[str, str]] = []
@@ -46,7 +47,7 @@ def parse_file(file: str | StringIO) -> ET.ElementTree:
     for event, elem in ET.iterparse(file, events):
         if event == "start-ns":
             # elem is a tuple[str, str] when event is "start-ns"
-            ns_map.append(elem)  # type: ignore[arg-type]
+            ns_map.append(cast(tuple[str, str], elem))
         elif event == "end-ns":
             ns_map.pop()
         elif event == "start":
