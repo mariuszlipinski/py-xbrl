@@ -414,6 +414,7 @@ NS_MAP: dict[str, str] = {
     "http://fasb.org/us-roles/2022": "https://xbrl.fasb.org/us-gaap/2022/elts/us-roles-2022.xsd",
     "http://fasb.org/srt-types/2022": "https://xbrl.fasb.org/srt/2022/elts/srt-types-2022.xsd",
     "http://fasb.org/srt-roles/2022": "https://xbrl.fasb.org/srt/2022/elts/srt-roles-2022.xsd",
+    "http://xbrl.sec.gov/cef/2026": "https://xbrl.sec.gov/cef/2026/cef-2026.xsd",
     "http://xbrl.sec.gov/cef/2023": "https://xbrl.sec.gov/cef/2023/cef-2023.xsd",
     "http://xbrl.sec.gov/cef-pre/2023": "https://xbrl.sec.gov/cef/2023/cef-2023_pre.xsd",
     "http://xbrl.sec.gov/cef/2022": "https://xbrl.sec.gov/cef/2022/cef-2022.xsd",
