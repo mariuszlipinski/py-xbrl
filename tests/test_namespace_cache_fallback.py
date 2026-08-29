@@ -30,13 +30,7 @@ class NamespaceCacheFallbackTest(unittest.TestCase):
         # Simulate a cached SEC taxonomy file that is missing from static NS_MAP.
         ns = "http://xbrl.sec.gov/unit-test-tax/2099"
         with tempfile.TemporaryDirectory(prefix="xbrl_cache_") as cache_dir:
-            schema_path = os.path.join(
-                cache_dir,
-                "xbrl.sec.gov",
-                "unit-test-tax",
-                "2099",
-                "unit-test-tax-2099.xsd",
-            )
+            schema_path = os.path.join(cache_dir, "xbrl.sec.gov", "unit-test-tax", "2099", "unit-test-tax-2099.xsd")
             _write_minimal_xsd(schema_path, ns)
 
             parser = TaxonomyParser(HttpCache(cache_dir))
@@ -59,13 +53,7 @@ class NamespaceCacheFallbackTest(unittest.TestCase):
         # Fallback must refuse scanning this host, even if a matching XSD exists.
         ns = "http://example.invalid/unit-test-tax/2099"
         with tempfile.TemporaryDirectory(prefix="xbrl_cache_") as cache_dir:
-            schema_path = os.path.join(
-                cache_dir,
-                "example.invalid",
-                "unit-test-tax",
-                "2099",
-                "unit-test-tax-2099.xsd",
-            )
+            schema_path = os.path.join(cache_dir, "example.invalid", "unit-test-tax", "2099", "unit-test-tax-2099.xsd")
             _write_minimal_xsd(schema_path, ns)
 
             parser = TaxonomyParser(HttpCache(cache_dir))
